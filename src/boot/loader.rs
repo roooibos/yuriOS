@@ -3,6 +3,7 @@
 
 use uefi::prelude::*;
 use core::panic::PanicInfo;
+use kernel::kernel::kernel_entry;
 
 #[entry]
 fn main(_image_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
@@ -15,7 +16,14 @@ fn main(_image_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
         .stdout()
         .output_string(cstr16!("kyou ha oyakodon!\n"));
     
-    loop {}
+    //ブートサービスの終了
+    let _ = unsafe {
+        system_table.exit_boot_services(uefi::table::boot::MemoryType::LOADER_DATA)
+    };
+    
+    kernel_entry();
+    
+    Status::SUCCESS
 }
 
 #[global_allocator]
