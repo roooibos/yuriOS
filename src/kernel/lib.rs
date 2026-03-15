@@ -6,6 +6,8 @@
 
 /// カーネル本体
 pub mod kernel;
+/// しかくかくよ
+pub mod monitor;
 
 #[repr(C)]
 pub struct BootInfo {
